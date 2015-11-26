@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.*;
 import javax.imageio.ImageIO;
 import java.sql.DatabaseMetaData;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,7 +34,78 @@ public class LivroDAO {
         }
     }
 
+    public ArrayList listTableNames() {
+        try {
+            DatabaseMetaData metadata = con.getMetaData();
+            String table[] = {"TABLE"};
+            ResultSet rs;
+            ArrayList tables;
+            rs = metadata.getTables(null, null, null, table);
+            tables = new ArrayList();
+            while (rs.next()) {
+                tables.add(rs.getString("TABLE_NAME"));
+            }
+            return tables;
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public ArrayList listColunaNames() {
+        try {
+            ArrayList retorno = new ArrayList();
+            String table[] = {"TABLE"};
+            ResultSet rs;
+            ArrayList tables;
+            DatabaseMetaData metadata = con.getMetaData();
+            rs = metadata.getTables(null, null, null, table);
+            tables = new ArrayList();
+            while (rs.next()) {
+                tables.add(rs.getString("TABLE_NAME"));
+            }
+            for (Object actualTable : tables) {
+                rs = metadata.getColumns(null, null, (String) actualTable, null);
+                System.out.println(actualTable.toString().toUpperCase());
+                while (rs.next()) {
+                    retorno.add(rs.getString("COLUMN_NAME"));
+                }
+            }
+            return retorno;
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public ArrayList listColunaTipos() {
+        try {
+            ArrayList retorno = new ArrayList();
+            String table[] = {"TABLE"};
+            ResultSet rs;
+            ArrayList tables;
+            DatabaseMetaData metadata = con.getMetaData();
+            rs = metadata.getTables(null, null, null, table);
+            tables = new ArrayList();
+            while (rs.next()) {
+                tables.add(rs.getString("TABLE_NAME"));
+            }
+            for (Object actualTable : tables) {
+                rs = metadata.getColumns(null, null, (String) actualTable, null);
+                System.out.println(actualTable.toString().toUpperCase());
+                while (rs.next()) {
+                    retorno.add(rs.getString("TYPE_NAME"));
+                }
+            }
+            return retorno;
+        } catch (SQLException ex) {
+            Logger.getLogger(LivroDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public List listByTitulo(String titulo) {
+        //professor deixou vazio? ou eu que fiz isso e esqueci?
         return null;
     }
 
